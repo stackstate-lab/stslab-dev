@@ -39,7 +39,8 @@ Prerequisites:
 Using `pip` to install `stsdev`.
 
 ```bash
-python -m pip install git+https://github.com/stackstatelab/stslab-dev/xxx/todo
+python -m pip install git+https://github.com/stackstatelab/stslab-dev/archive/stslab-dev-0.0.1.tar.gz
+
 ```
 
 ## Quick-Start
