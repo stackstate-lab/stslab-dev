@@ -10,7 +10,7 @@ $project_name
 ###Starting a new project
 
 ```console
-$ stsdev project new --name my-custom-acme-checks --package sts_acme_checks
+$$ stsdev project new --name my-custom-acme-checks --package sts_acme_checks
 
 ```
 
@@ -25,13 +25,13 @@ Tests will be created in `my-custom-acme-checks/tests/`.
 Dependencies for your project can be managed through `poetry add` or `poetry add -D` for development dependency.
 
 ```console
-$ poetry add PyYAML
+$$ poetry add PyYAML
 ```
 
 ###Build the project
 To build the project,
 ```console
-$ stsdev build
+$$ stsdev build
 ```
 This will automatically run code formatting, linting, tests and finally the build.
 
@@ -39,7 +39,7 @@ This will automatically run code formatting, linting, tests and finally the buil
 ###Creating check
 
 ```console
-$ stsdev checks create AcmeCheck
+$$ stsdev checks create AcmeCheck
 ```
 Will scaffold a sample,
 * check -  `my-custom-acme-checks/src/acmecheck.py`
@@ -53,7 +53,7 @@ from a custom check, how to unit them and how to configure them to run in the ag
 ###Unit Testing
 To run tests in the project,
 ```console
-$ stsdev test
+$$ stsdev test
 ```
 This will automatically run code formatting, linting, and tests.
 
@@ -61,12 +61,12 @@ This will automatically run code formatting, linting, and tests.
 
 A check can be dry-run inside the StackState Agent by running
 ```console
-$ sudo -u stackstate-agent check xxx`
+$$ sudo -u stackstate-agent check xxx`
 ```
 `stsdev` makes this take simple by packaging your checks and running the agent check using docker.
 
 ```console
-$ stsdev agent check acmecheck`
+$$ stsdev agent check acmecheck`
 ```
 Before running the command, remember to copy the example conf `tests/resources/conf.d/acmecheck.d/conf.yaml.example` to
 `tests/resources/conf.d/acmecheck.d/conf.yaml`.
@@ -77,5 +77,5 @@ Before running the command, remember to copy the example conf `tests/resources/c
 Starts the StackState Agent in the foreground using the test configuration `tests/resources/conf.d`
 
 ```console
-$ stsdev agent run`
+$$ stsdev agent run`
 ```
