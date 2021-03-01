@@ -38,8 +38,12 @@ Prerequisites:
 
 Using `pip` to install `stsdev`.
 
+**Note:** 
+For now please manually download from release section and then use pip to install.
+This is due to this repository currently being private.
+
 ```bash
-python -m pip install git+https://github.com/stackstatelab/stslab-dev/archive/stslab-dev-0.0.1.tar.gz
+python -m pip install https://github.com/stackstate-lab/stslab-dev/releases/download/v0.0.1/stslab_dev-0.0.1-py3-none-any.whl
 
 ```
 
