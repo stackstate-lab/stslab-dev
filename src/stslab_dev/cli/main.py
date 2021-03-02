@@ -1,5 +1,6 @@
 import typer
 from . import agent_group, checks_group, project_group
+from .commands.agent import Agent
 from plumbum import local, FG
 from plumbum.commands.processes import ProcessExecutionError
 
@@ -49,6 +50,21 @@ def build(use_tox: bool = typer.Option("True", help="Will use tox to run tests."
             return e.retcode
     else:
         typer.echo("Stopping build.")
+
+
+@app.command("package")
+def package(
+    use_tox: bool = typer.Option("True", help="Will use tox to run tests."),
+    run_tests: bool = typer.Option("True", help="Runs formatting, linting and tests"),
+):
+    """Build current project"""
+    rc = 0
+    if run_tests:
+        rc = test(ignore_formatting=False, use_tox=use_tox)
+    if rc == 0:
+        Agent().package_checks()
+    else:
+        typer.echo("Stopping packaging.")
 
 
 def main():

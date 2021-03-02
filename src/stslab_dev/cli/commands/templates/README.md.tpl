@@ -61,12 +61,12 @@ This will automatically run code formatting, linting, and tests.
 
 A check can be dry-run inside the StackState Agent by running
 ```console
-$$ sudo -u stackstate-agent check xxx`
+$$ sudo -u stackstate-agent check xxx
 ```
 `stsdev` makes this take simple by packaging your checks and running the agent check using docker.
 
 ```console
-$$ stsdev agent check acmecheck`
+$$ stsdev agent check acmecheck
 ```
 Before running the command, remember to copy the example conf `tests/resources/conf.d/acmecheck.d/conf.yaml.example` to
 `tests/resources/conf.d/acmecheck.d/conf.yaml`.
@@ -77,5 +77,16 @@ Before running the command, remember to copy the example conf `tests/resources/c
 Starts the StackState Agent in the foreground using the test configuration `tests/resources/conf.d`
 
 ```console
-$$ stsdev agent run`
+$$ stsdev agent run
 ```
+
+### Packaging checks
+
+
+```console
+$$ stsdev package
+```
+This will automatically run code formatting, linting, tests and finally the packaging.
+A zip file is created in the `dist` directory.  Copy this to the host running the agent and unzip it.
+Run the `install.sh`.
+

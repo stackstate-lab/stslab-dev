@@ -19,6 +19,7 @@ $ stsdev [OPTIONS] COMMAND [ARGS]...
 * `agent`: Help manage StackState Agent
 * `build`: Build current project
 * `checks`: Help manage checks in a project
+* `package`: Build current project
 * `project`: Help manage integration project
 * `test`: Run tests for current project
 
@@ -140,6 +141,22 @@ $ stsdev checks create [OPTIONS] CHECK_NAME
 
 **Options**:
 
+* `--help`: Show this message and exit.
+
+## `stsdev package`
+
+Build current project
+
+**Usage**:
+
+```console
+$ stsdev package [OPTIONS]
+```
+
+**Options**:
+
+* `--use-tox / --no-use-tox`: Will use tox to run tests.  [default: True]
+* `--run-tests / --no-run-tests`: Runs formatting, linting and tests  [default: True]
 * `--help`: Show this message and exit.
 
 ## `stsdev project`

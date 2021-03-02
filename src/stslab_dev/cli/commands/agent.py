@@ -2,6 +2,8 @@ import typer
 import os
 from plumbum import local, FG
 from dotenv import load_dotenv
+import pathlib
+import toml
 
 
 class Agent(object):
@@ -63,6 +65,39 @@ class Agent(object):
         requirements_file = f"{agent_dir}/requirements.txt"
         with (open(requirements_file, mode="w")) as f:
             f.write("\n".join(lines))
+
+    def package_checks(self):
+        agent_dir = self.prepare_agent_dir()
+        self.setup_requirements_txt(agent_dir)
+        pyproject_data = toml.loads(pathlib.Path("pyproject.toml").read_text())
+        project_version = pyproject_data["tool"]["poetry"]["version"]
+        cwd = os.getcwd()
+        local["mkdir"]["-p", "dist"]()
+        pkg_name = os.getenv("STSDEV_PKG").split("/")[1]
+        install_file = """#!/bin/bash
+            if test -f "./requirements.txt"; then
+                echo "Installing requirement"
+                sudo -u stackstate-agent /opt/stackstate-agent/embedded/bin/pip install -r ./requirements.txt
+            fi
+            echo "Copying config and checks to /etc/stackstate-agent"
+            sudo -u stackstate-agent cp -r ./conf.d/* /etc/stackstate-agent/conf.d
+            sudo -u stackstate-agent cp -r ./checks.d/* /etc/stackstate-agent/checks.d
+            echo "Done".
+        """
+        try:
+            self.echo(f"Packaging version {project_version} of {pkg_name}")
+            os.chdir(".agent")
+            zipfile = f"{pkg_name}-{project_version}.zip"
+            local["find"][agent_dir, "-name", "conf.yaml", "-exec", "rm", "{}", ";"]()
+            with (open("install.sh", mode="w")) as f:
+                f.write(install_file)
+            local["zip"][
+                "-rv", zipfile, "requirements.txt", "conf.d", "checks.d", "install.sh"
+            ]()
+            local["mv"][zipfile, "../dist"]()
+            self.echo("All done!")
+        finally:
+            os.chdir(cwd)
 
     @staticmethod
     def prepare_agent_dir():
