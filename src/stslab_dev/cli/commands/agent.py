@@ -8,12 +8,23 @@ class Agent(object):
     STS_API_KEY = "STS_API_KEY"
     STS_URL = "STS_URL"
 
-    def __init__(self):
+    def __init__(
+        self, image="stackstate/stackstate-agent-2-dev:latest", echo=typer.echo
+    ):
+        self.echo = echo
         self.docker = local["docker"]
+        self.poetry = local["poetry"]
+        self.image = image
         load_dotenv(dotenv_path=".env")
 
-    def run_agent(self):
+    def prepare_to_run(self):
         agent_dir = self.prepare_agent_dir()
+        self.build_image()
+        self.setup_requirements_txt(agent_dir)
+        return agent_dir
+
+    def run_agent(self):
+        agent_dir = self.prepare_to_run()
         self.docker[
             "run",
             "-v",
@@ -24,20 +35,34 @@ class Agent(object):
             f"STS_STS_URL={os.getenv(self.STS_URL)}",
             "-e",
             "DOCKER_STS_AGENT=false",
-            "stackstate/stackstate-agent-2:latest",
+            self.image,
         ] & FG
 
     def run_agent_check(self, check_name):
-        agent_dir = self.prepare_agent_dir()
+        agent_dir = self.prepare_to_run()
+        self.build_image()
+        self.setup_requirements_txt(agent_dir)
         self.docker[
             "run",
             "-v",
             "%s:/etc/stackstate-agent" % agent_dir,
-            "stackstate/stackstate-agent-2-dev:latest",
-            "agent",
-            "check",
+            self.image,
+            "/opt/stackstate-agent/bin/run-dev-check.sh",
             check_name,
         ] & FG
+
+    @staticmethod
+    def setup_requirements_txt(agent_dir):
+        poetry = local["poetry"]
+        requirements = poetry["export", "--without-hashes"]()
+        if requirements.strip() == "":
+            return
+        lines = []
+        for line in requirements.splitlines():
+            lines.append(line.split(";")[0])
+        requirements_file = f"{agent_dir}/requirements.txt"
+        with (open(requirements_file, mode="w")) as f:
+            f.write("\n".join(lines))
 
     @staticmethod
     def prepare_agent_dir():
@@ -69,3 +94,43 @@ class Agent(object):
         if os.path.exists(stackstate_yaml):
             cp[stackstate_yaml, agent_dir]()
         return agent_dir
+
+    def image_exists(self):
+        listing: str = self.docker[
+            "images",
+            self.image,
+            "--format",
+            "{{json . }}",
+        ]()
+        return listing.strip() != ""
+
+    def delete_image(self):
+        self.docker["rmi", "--force", self.image] & FG
+
+    def build_image(self):
+        if self.image_exists():
+            return
+
+        init_file = """#!/bin/bash\\n\\
+            if test -f "/etc/stackstate-agent/requirements.txt"; then\\n\\
+                echo "Installing requirement"\\n\\
+                /opt/stackstate-agent/embedded/bin/pip install -r /etc/stackstate-agent/requirements.txt\\n\\
+            fi\\n\\
+        """
+        run_check = f"""{init_file}\\n\\
+            agent check "$1"\\n\\
+        """
+        dockerfile = f"""FROM stackstate/stackstate-agent-2:latest
+        RUN apt update && \\
+            apt-get install -yq iputils-ping && \\
+            /opt/stackstate-agent/embedded/bin/pip uninstall -y requests && \\
+            /opt/stackstate-agent/embedded/bin/pip install requests && \\
+            /opt/stackstate-agent/embedded/bin/pip install pydevd-pycharm~=203.7148.57
+        RUN echo '{init_file}' >> /etc/cont-init.d/95-load-requirement.sh
+        RUN echo '{run_check}' >> /opt/stackstate-agent/bin/run-dev-check.sh
+        RUN chmod +x /opt/stackstate-agent/bin/run-dev-check.sh /etc/cont-init.d/95-load-requirement.sh
+        """
+        docker_build = self.docker["build", "-t", self.image, "-"]
+        complete_docker_build = docker_build << dockerfile
+        self.echo("Building StackState Agent for Development")
+        self.echo(complete_docker_build())

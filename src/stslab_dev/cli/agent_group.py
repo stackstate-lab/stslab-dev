@@ -22,3 +22,14 @@ def check_agent(check_name):
         return Agent().run_agent_check(check_name)
     except ProcessExecutionError as e:
         return e.retcode
+
+
+@app.command("clean")
+def clean_agent_image():
+    """Removes the development docker image for the StackState Agent.
+    Will be automatically build when needed.
+    """
+    try:
+        return Agent().delete_image()
+    except ProcessExecutionError as e:
+        return e.retcode

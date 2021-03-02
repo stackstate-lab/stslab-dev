@@ -39,6 +39,7 @@ $ stsdev agent [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `check`: Execute the check using the StackState Agent.
+* `clean`: Removes the development docker image for the...
 * `run`: Starts the StackState Agent in the...
 
 ### `stsdev agent check`
@@ -54,6 +55,21 @@ $ stsdev agent check [OPTIONS] CHECK_NAME
 **Arguments**:
 
 * `CHECK_NAME`: [required]
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+### `stsdev agent clean`
+
+Removes the development docker image for the StackState Agent.
+Will be automatically build when needed.
+
+**Usage**:
+
+```console
+$ stsdev agent clean [OPTIONS]
+```
 
 **Options**:
 
@@ -85,6 +101,7 @@ $ stsdev build [OPTIONS]
 
 **Options**:
 
+* `--use-tox / --no-use-tox`: Will use tox to run tests.  [default: True]
 * `--help`: Show this message and exit.
 
 ## `stsdev checks`
@@ -141,9 +158,9 @@ $ stsdev project [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `create`: Scaffold a new project for developing...
+* `new`: Scaffold a new project for developing...
 
-### `stsdev project create`
+### `stsdev project new`
 
 Scaffold a new project for developing StackState Agent integrations
 examples:
@@ -152,7 +169,7 @@ examples:
 **Usage**:
 
 ```console
-$ stsdev project create [OPTIONS]
+$ stsdev project new [OPTIONS]
 ```
 
 **Options**:
@@ -175,4 +192,5 @@ $ stsdev test [OPTIONS]
 **Options**:
 
 * `--ignore-formatting / --no-ignore-formatting`: Ignore code formatting before running tests  [default: False]
+* `--use-tox / --no-use-tox`: Will use tox to run tests.  [default: True]
 * `--help`: Show this message and exit.
