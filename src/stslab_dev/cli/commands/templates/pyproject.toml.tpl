@@ -51,22 +51,17 @@ commands =
 """
 
 [tool.flakehell]
-exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv", ".ststemp"]
+exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv", ".ststemp", ".agent"]
 include = ["src", "tests"]
 format = "colored"
 max_line_length = 120
 show_source = true
 
 [tool.flakehell.plugins]
-flake8-bandit = ["+*", "-S322"]
-flake8-bugbear = ["+*"]
-flake8-builtins = ["+*"]
-flake8-pytest-style = ["+*"]
-mccabe = ["+*"]
-pep8-naming = ["+*"]
-pycodestyle = ["+*"]
-pyflakes = ["+*"]
-pylint = ["+*"]
+"*" = [
+    "+*",
+    "-E203",
+    ]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
