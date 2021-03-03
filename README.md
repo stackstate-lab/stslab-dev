@@ -43,7 +43,7 @@ For now please manually download from release section and then use pip to instal
 This is due to this repository currently being private.
 
 ```bash
-python -m pip install https://github.com/stackstate-lab/stslab-dev/releases/download/v0.0.1/stslab_dev-0.0.1-py3-none-any.whl
+python -m pip install https://github.com/stackstate-lab/stslab-dev/releases/download/v0.0.2/stslab_dev-0.0.2-py3-none-any.whl
 
 ```
 
