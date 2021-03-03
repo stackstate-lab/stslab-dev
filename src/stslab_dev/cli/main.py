@@ -14,6 +14,20 @@ poetry = local["poetry"]
 poetry_run = poetry["run"]
 
 
+@app.command("apply-style")
+def apply_style():
+    """Formats code using Black and check stype using Flake"""
+    try:
+        typer.echo("Formatting code...")
+        poetry_run["black", "src", "tests"] & FG
+        typer.echo("Checking code style...")
+        poetry_run["flakehell", "lint"] & FG
+        typer.echo("All done!")
+        return 0
+    except ProcessExecutionError as e:
+        return e.retcode
+
+
 @app.command("test")
 def test(
     ignore_formatting: bool = typer.Option(
@@ -24,11 +38,7 @@ def test(
     """Run tests for current project"""
     try:
         if not ignore_formatting:
-            typer.echo("Formatting code...")
-            poetry_run["black", "src", "tests"] & FG
-            typer.echo("Checking code style...")
-            poetry_run["flakehell", "lint"] & FG
-            typer.echo("All done!")
+            apply_style()
         typer.echo("Running tests ...")
         if use_tox:
             poetry_run["tox"] & FG

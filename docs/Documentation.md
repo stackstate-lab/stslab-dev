@@ -17,6 +17,7 @@ $ stsdev [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `agent`: Help manage StackState Agent
+* `apply-style`: Formats code using Black and check stype...
 * `build`: Build current project
 * `checks`: Help manage checks in a project
 * `package`: Build current project
@@ -84,6 +85,20 @@ Starts the StackState Agent in the foreground.
 
 ```console
 $ stsdev agent run [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `stsdev apply-style`
+
+Formats code using Black and check stype using Flake
+
+**Usage**:
+
+```console
+$ stsdev apply-style [OPTIONS]
 ```
 
 **Options**:
