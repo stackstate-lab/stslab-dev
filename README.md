@@ -32,7 +32,7 @@ typer stslab_dev.cli.main utils docs --name stsdev --output ./docs/Documentation
 
 Prerequisites:
 - python 3.7+t
-- [Poetry](https://python-poetry.org/)
+- [Poetry](https://python-poetry.org/docs/#installation)
 - [Docker](https://www.docker.com/get-started)
 
 
@@ -67,18 +67,10 @@ Tests will be created in `my-custom-acme-checks/tests/`.
 [Poetry](https://python-poetry.org/) is used as the packaging and dependency management system.
 
 Dependencies for your project can be managed through `poetry add` or `poetry add -D` for development dependency.
-
+Install all dependencies for scaffolded project
 ```console
-$ poetry add PyYAML  
+$ poetry install  
 ```
-
-### Build the project
-To build the project,
-```console
-$ stsdev build  
-```
-This will automatically run code formatting, linting, tests and finally the build.
-
 
 ### Creating check
 
@@ -123,6 +115,13 @@ Starts the StackState Agent in the foreground using the test configuration `test
 ```console
 $ stsdev agent run
 ```
+
+### Build the project
+To build the project,
+```console
+$ stsdev build  
+```
+This will automatically run code formatting, linting, tests and finally the build.
 
 ### Packaging checks
 
