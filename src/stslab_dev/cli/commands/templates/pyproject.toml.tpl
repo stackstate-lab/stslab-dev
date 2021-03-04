@@ -22,7 +22,7 @@ Deprecated = "^1.2.11"
 requests = "^2.24.0"
 
 [tool.black]
-line-length = 79
+line-length = 120
 target-version = ['py27']
 include = '\.pyi?$$'
 exclude = '''
