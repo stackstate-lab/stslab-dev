@@ -12,6 +12,8 @@ pytest = "^5.2"
 flakehell = "^0.9.0"
 tox = "^3.22.0"
 black = "^20.8b1"
+py-backwards = "^0.7"
+tox-py-backwards = "^0.1"
 stackstate-checks-base = { path = "$checksbase_path", develop = false }
 # StackState Agent Integration dev deps
 pyyaml = "^3.13"
@@ -45,6 +47,7 @@ isolated_build = true
 envlist = python2
 [testenv]
 whitelist_externals = poetry
+py_backwards = true
 commands =
     poetry install -vvv
     poetry run pytest
