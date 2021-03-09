@@ -22,7 +22,7 @@ poetry run pytest
 #Build
 poetry build
 # Generate documentation
-typer stslab_dev.cli.main utils docs --name stsdev --output ./docs/Documentation.md   
+poetry run typer stslab_dev.cli.main utils docs --name stsdev --output ./docs/Documentation.md   
 
 
 ```
@@ -31,7 +31,7 @@ typer stslab_dev.cli.main utils docs --name stsdev --output ./docs/Documentation
 ## Installation
 
 Prerequisites:
-- python 3.7+t
+- python 3.7+
 - [Poetry](https://python-poetry.org/docs/#installation)
 - [Docker](https://www.docker.com/get-started)
 

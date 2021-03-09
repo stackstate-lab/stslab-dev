@@ -29,6 +29,7 @@ class Agent(object):
         agent_dir = self.prepare_to_run()
         self.docker[
             "run",
+            "--rm",
             "-v",
             "%s:/etc/stackstate-agent" % agent_dir,
             "-e",
@@ -46,6 +47,7 @@ class Agent(object):
         self.setup_requirements_txt(agent_dir)
         self.docker[
             "run",
+            "--rm",
             "-v",
             "%s:/etc/stackstate-agent" % agent_dir,
             self.image,

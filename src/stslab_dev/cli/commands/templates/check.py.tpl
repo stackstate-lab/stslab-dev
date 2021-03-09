@@ -7,8 +7,6 @@ from stackstate_checks.base import (
 
 class $class_name(AgentCheck):
     # Components types in STS. See https://localhost:7070/#/settings/component_types
-    SERVICE_COMP_TYPE_ID = "urn:stackpack:common:component-type:service"
-    APP_COMP_TYPE_ID = "urn:stackpack:common:component-type:application"
 
     def __init__(self, name, init_config, agentConfig, instances=None):
         AgentCheck.__init__(self, name, init_config, agentConfig, instances)
@@ -65,7 +63,7 @@ class $class_name(AgentCheck):
         }
 
         # Register the component
-        self.component(app_id, self.APP_COMP_TYPE_ID, app_component)
+        self.component(app_id, "application", app_component)
 
         # We can see that the application runs on a server.
         # Say for instance servers are discovered by another integration in StackState like VMWare, AWS or Azure
@@ -91,8 +89,8 @@ class $class_name(AgentCheck):
 
         # Relate the 2 components based on their names.
         self.relation(
-            app_component["name"],
-            server_component["name"],
+            app_id,
+            host_id,
             "runs_on",
             {"any": "additional properties and labels"},
         )
