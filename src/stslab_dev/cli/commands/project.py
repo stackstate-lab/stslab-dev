@@ -1,11 +1,13 @@
 import importlib.resources as pkg_resources
-from . import templates
-import requests
 import os
+import shutil
 from os import path
 from string import Template
+
+import requests
 import typer
-from plumbum import local
+
+from . import templates
 
 
 class Project(object):
@@ -56,6 +58,7 @@ class Project(object):
         )
         self._copy_template_to("stackstate.yaml.tpl", self.integration_resources_dir)
         self._copy_template_to(".gitignore.tpl", self.proj_name)
+        self._copy_template_to("mypy.ini.tpl", self.proj_name)
         self._write_file(path.join(self.integration_src_dir, "__init__.py"), "")
 
         env_entries = [
@@ -93,8 +96,9 @@ class Project(object):
             )
             self.echo(response.text, err=True)
             return 1
-        tar = local["tar"]
-        tar["xzf", target_tar_gz, "-C", self.checksbase_dir]()
+        shutil.unpack_archive(
+            filename=target_tar_gz, extract_dir=self.checksbase_dir, format="gztar"
+        )
         os.rename(
             path.join(
                 self.checksbase_dir,

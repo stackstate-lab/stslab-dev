@@ -1,6 +1,7 @@
-from stslab_dev.cli.commands.project import Project
-from unittest.mock import MagicMock
 from os import path
+from unittest.mock import MagicMock
+
+from stslab_dev.cli.commands.project import Project
 
 project_name = "test_project"
 checks_pkg = "my_checks"

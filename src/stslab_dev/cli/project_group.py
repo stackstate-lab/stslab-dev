@@ -1,4 +1,5 @@
 import typer
+
 from .commands.project import Project
 
 app = typer.Typer(help="Help manage integration project")

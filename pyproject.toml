@@ -15,8 +15,10 @@ python-dotenv = "^0.15.0"
 requests = "^2.25.1"
 stringcase = "^1.2.0"
 flakehell = "^0.9.0"
+mypy = "^0.812"
 py-backwards = "^0.7"
 tox-py-backwards = "^0.1"
+isort = "^5.7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -29,6 +31,7 @@ testpaths = [
     "tests",
     "integration",
 ]
+norecursedirs = ["*resources*"]
 
 [tool.tox]
 legacy_tox_ini = """
@@ -43,7 +46,7 @@ commands =
 """
 
 [tool.flakehell]
-exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv"]
+exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv", "dist"]
 include = ["src", "tests"]
 format = "colored"
 max_line_length = 120
@@ -54,6 +57,11 @@ show_source = true
     "+*",
     "-E203",
     ]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+src_paths=["src", "tests"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

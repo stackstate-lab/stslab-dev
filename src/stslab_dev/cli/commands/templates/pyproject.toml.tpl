@@ -12,8 +12,10 @@ pytest = "^5.2"
 flakehell = "^0.9.0"
 tox = "^3.22.0"
 black = "^20.8b1"
+mypy = "^0.812"
 py-backwards = "^0.7"
 tox-py-backwards = "^0.1"
+isort = "^5.7.0"
 stackstate-checks-base = { path = "$checksbase_path", develop = false }
 # StackState Agent Integration dev deps
 pyyaml = "^3.13"

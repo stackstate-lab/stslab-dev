@@ -1,8 +1,10 @@
-from stslab_dev.cli.commands.checks import Checks
-from unittest.mock import MagicMock
 import os
 from os import path
+from unittest.mock import MagicMock
+
 from dotenv import load_dotenv
+
+from stslab_dev.cli.commands.checks import Checks
 
 project_name = "test_project"
 checks_pkg = "my_checks"

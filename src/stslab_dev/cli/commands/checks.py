@@ -1,16 +1,18 @@
 import importlib.resources as pkg_resources
-from . import templates
 import os
 from os import path
 from string import Template
+
 import typer
 from dotenv import load_dotenv
+
+from . import templates
 
 
 class Checks(object):
     def __init__(self, check_name: str, echo=typer.echo):
         load_dotenv(dotenv_path=".env")
-        self.integration_pkg = os.getenv("STSDEV_PKG")
+        self.integration_pkg = os.environ["STSDEV_PKG"]
         self.check_name = check_name
         self.check_name_capitalize = check_name[0].upper() + check_name[1:]
         self.check_name_lower = check_name.lower()

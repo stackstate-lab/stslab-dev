@@ -1,9 +1,12 @@
+
+import os
+
 import typer
-from . import agent_group, checks_group, project_group
-from .commands.agent import Agent
-from plumbum import local, FG
+from plumbum import FG, local
 from plumbum.commands.processes import ProcessExecutionError
 
+from . import agent_group, checks_group, project_group
+from .commands.build import BuildWorkspace
 
 app = typer.Typer(help="CLI for the development of StackState Agent integrations")
 app.add_typer(agent_group.app, name="agent")
@@ -14,14 +17,19 @@ poetry = local["poetry"]
 poetry_run = poetry["run"]
 
 
+
 @app.command("apply-style")
 def apply_style():
     """Formats code using Black and check stype using Flake"""
     try:
         typer.echo("Formatting code...")
         poetry_run["black", "src", "tests"] & FG
+        typer.echo("Sorting imports...")
+        poetry_run["isort", "src"] & FG
         typer.echo("Checking code style...")
         poetry_run["flakehell", "lint"] & FG
+        typer.echo("Checking typing...")
+        poetry_run["mypy", "src"] & FG
         typer.echo("All done!")
         return 0
     except ProcessExecutionError as e:
@@ -72,7 +80,7 @@ def package(
     if run_tests:
         rc = test(ignore_formatting=False, use_tox=use_tox)
     if rc == 0:
-        Agent().package_checks()
+        BuildWorkspace(os.getcwd()).package_workspace()
     else:
         typer.echo("Stopping packaging.")
 
