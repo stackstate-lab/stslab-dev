@@ -29,14 +29,14 @@ class BuildWorkspace:
 
     def prepare_workspace(self, package_build: bool = False) -> None:
         shutil.rmtree(self.agent_dir, ignore_errors=True)
-        os.makedirs(self.checks_d_dir)
+        os.makedirs(self.agent_dir)
         if package_build:
             ignore_conf_yamls = shutil.ignore_patterns("conf.yaml")
             shutil.copytree(self.test_conf_d_dir, self.conf_d_dir, ignore=ignore_conf_yamls)
         else:
             shutil.copytree(self.test_conf_d_dir, self.conf_d_dir)
             if os.path.exists(self.test_share_dir):
-                shutil.copytree(self.test_share_dir, self.agent_dir)
+                shutil.copytree(self.test_share_dir, j(self.agent_dir, "share"))
             if os.path.exists(self.stackstate_yaml):
                 shutil.copy(self.stackstate_yaml, j(self.agent_dir, "stackstate.yaml"))
 
