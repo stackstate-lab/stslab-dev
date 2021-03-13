@@ -90,6 +90,13 @@ class Agent:
         RUN echo '{run_check}' >> /opt/stackstate-agent/bin/run-dev-check.sh
         RUN chmod +x /opt/stackstate-agent/bin/run-dev-check.sh /etc/cont-init.d/95-load-requirement.sh
         """
+        docker_ext_file = os.getenv("STSDEV_IMAGE_EXT")
+        if docker_ext_file:
+            with open(docker_ext_file, "r") as f:
+                docker_extension = [dockerfile]
+                docker_extension.extend(f.readlines())
+                dockerfile = "\n".join(docker_extension)
+
         docker_build = self.docker["build", "-t", self.image, "-"]
         complete_docker_build = docker_build << dockerfile
         self.echo("Building StackState Agent for Development")

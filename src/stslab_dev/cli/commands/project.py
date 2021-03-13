@@ -64,7 +64,8 @@ class Project(object):
         env_entries = [
             "STS_URL=http://localhost:7070",
             "STS_API_KEY=xxxx",
-            f"STSDEV_PKG=src/{self.integration_name}",
+            "# Define additional docker run commands to include in agent image",
+            "#STSDEV_IMAGE_EXT=path/to/file/with/docker/run/commands"
         ]
         self._write_file(path.join(self.proj_name, ".env"), "\n".join(env_entries))
 
