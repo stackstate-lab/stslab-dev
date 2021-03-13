@@ -82,7 +82,7 @@ class Agent:
         """
         dockerfile = f"""FROM stackstate/stackstate-agent-2:latest
         RUN apt update && \\
-            apt-get install -yq iputils-ping && \\
+            apt-get install -yq iputils-ping libkrb5-3 openssl gcc g++ && \\
             /opt/stackstate-agent/embedded/bin/pip uninstall -y requests && \\
             /opt/stackstate-agent/embedded/bin/pip install requests && \\
             /opt/stackstate-agent/embedded/bin/pip install pydevd-pycharm~=203.7148.57
