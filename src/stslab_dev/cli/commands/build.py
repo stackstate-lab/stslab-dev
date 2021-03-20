@@ -24,7 +24,10 @@ class BuildWorkspace:
         self.test_conf_d_dir = j(self.resources_dir, "conf.d")
         self.test_share_dir = j(self.resources_dir, "share")
         self.src_dir = j(base_dir, "src")
-        self.pkg_name = os.listdir(self.src_dir)[0]
+        dirs_in_src = [
+            d for d in os.listdir(self.src_dir) if not str(d).startswith(".")
+        ]
+        self.pkg_name = str(dirs_in_src[0])
         self.pkg_dir = j(self.src_dir, self.pkg_name)
 
     def prepare_workspace(self, package_build: bool = False) -> None:
@@ -32,7 +35,9 @@ class BuildWorkspace:
         os.makedirs(self.agent_dir)
         if package_build:
             ignore_conf_yamls = shutil.ignore_patterns("conf.yaml")
-            shutil.copytree(self.test_conf_d_dir, self.conf_d_dir, ignore=ignore_conf_yamls)
+            shutil.copytree(
+                self.test_conf_d_dir, self.conf_d_dir, ignore=ignore_conf_yamls
+            )
         else:
             shutil.copytree(self.test_conf_d_dir, self.conf_d_dir)
             if os.path.exists(self.test_share_dir):
@@ -47,7 +52,8 @@ class BuildWorkspace:
         self.prepare_workspace(package_build=True)
         pyproject_data = toml.loads(pathlib.Path("pyproject.toml").read_text())
         project_version = pyproject_data["tool"]["poetry"]["version"]
-        os.makedirs(self.dist_dir)
+        if not os.path.exists(self.dist_dir):
+            os.makedirs(self.dist_dir)
         install_file = """#!/bin/bash
             if test -f "./requirements.txt"; then
                 echo "Installing requirement"
@@ -66,9 +72,13 @@ class BuildWorkspace:
 
     def _compile_to_py27(self) -> None:
         try:
+            self.echo(f"Compiling files in {self.pkg_dir}  to {self.checks_d_dir}")
             result = compile_files(
                 self.pkg_dir, self.checks_d_dir, const.TARGETS["2.7"]
             )
+            if result.files == 0:
+                self.echo("No python files found to compile.")
+                raise Exception("Stopping because no custom checks found to compile")
             self.echo(messages.compilation_result(result))
         except exceptions.CompilationError as e:
             self.echo(messages.syntax_error(e), err=True)
@@ -92,5 +102,8 @@ class BuildWorkspace:
             if match:
                 lines.append(line.split(";")[0])
         requirements_file = f"{self.agent_dir}/requirements.txt"
+        lines.append(
+            "typing==3.7.4"
+        )  # This is to support the dangling imports in 2.7 for now.
         with (open(requirements_file, mode="w")) as f:
             f.write("\n".join(lines))

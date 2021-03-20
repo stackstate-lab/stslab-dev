@@ -69,7 +69,7 @@ Tests will be created in `my-custom-acme-checks/tests/`.
 Dependencies for your project can be managed through `poetry add` or `poetry add -D` for development dependency.
 Install all dependencies for scaffolded project
 ```console
-$ poetry install  
+$ stsdev update  
 ```
 
 ### Creating check

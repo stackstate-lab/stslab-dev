@@ -29,4 +29,3 @@ def test_project_scaffold(tmpdir):
         assert path.exists(f"{project_name}/tests/resources/conf.d")
         assert path.exists(f"{project_name}/README.md")
         assert path.exists(f"{project_name}/pyproject.toml")
-        assert path.exists(f"{project_name}/.ststemp/packages/stackstate_checks_base")

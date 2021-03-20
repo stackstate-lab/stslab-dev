@@ -17,9 +17,10 @@ $ stsdev [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `agent`: Help manage StackState Agent
-* `apply-style`: Formats code using Black and check stype...
 * `build`: Build current project
 * `checks`: Help manage checks in a project
+* `code-style`: Formats code using Black and check stype...
+* `install`: Installs the projects dependencies.
 * `package`: Build current project
 * `project`: Help manage integration project
 * `test`: Run tests for current project
@@ -91,20 +92,6 @@ $ stsdev agent run [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-## `stsdev apply-style`
-
-Formats code using Black and check stype using Flake
-
-**Usage**:
-
-```console
-$ stsdev apply-style [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
 ## `stsdev build`
 
 Build current project
@@ -118,6 +105,8 @@ $ stsdev build [OPTIONS]
 **Options**:
 
 * `--use-tox / --no-use-tox`: Will use tox to run tests.  [default: True]
+* `--run-tests / --no-run-tests`: Runs tests  [default: True]
+* `--code-style / --no-code-style`: Apply code styling  [default: True]
 * `--help`: Show this message and exit.
 
 ## `stsdev checks`
@@ -158,6 +147,37 @@ $ stsdev checks create [OPTIONS] CHECK_NAME
 
 * `--help`: Show this message and exit.
 
+## `stsdev code-style`
+
+Formats code using Black and check stype using Flake
+
+**Usage**:
+
+```console
+$ stsdev code-style [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `stsdev install`
+
+Installs the projects dependencies. Same a `poetry install` except it installs the `stackstate_checks` package
+from github. This is a temporary workaround until https://github.com/python-poetry/poetry/issues/755 is fixed.
+
+**Usage**:
+
+```console
+$ stsdev install [OPTIONS]
+```
+
+**Options**:
+
+* `--version TEXT`: `stackstate_checks` version. This is a git tag.  [default: 1.10.1]
+* `--skip-poetry-install / --no-skip-poetry-install`: Skip poetry install  [default: False]
+* `--help`: Show this message and exit.
+
 ## `stsdev package`
 
 Build current project
@@ -171,7 +191,8 @@ $ stsdev package [OPTIONS]
 **Options**:
 
 * `--use-tox / --no-use-tox`: Will use tox to run tests.  [default: True]
-* `--run-tests / --no-run-tests`: Runs formatting, linting and tests  [default: True]
+* `--run-tests / --no-run-tests`: Runs tests  [default: True]
+* `--code-style / --no-code-style`: Apply code styling  [default: True]
 * `--help`: Show this message and exit.
 
 ## `stsdev project`
@@ -208,7 +229,6 @@ $ stsdev project new [OPTIONS]
 
 * `--name TEXT`: Name of project.  [required]
 * `--package TEXT`: Package to store sources in.  [required]
-* `--checksbase-version TEXT`: StackState Agent Integrations version.  [default: 1.8.1]
 * `--help`: Show this message and exit.
 
 ## `stsdev test`
@@ -223,6 +243,5 @@ $ stsdev test [OPTIONS]
 
 **Options**:
 
-* `--ignore-formatting / --no-ignore-formatting`: Ignore code formatting before running tests  [default: False]
 * `--use-tox / --no-use-tox`: Will use tox to run tests.  [default: True]
 * `--help`: Show this message and exit.

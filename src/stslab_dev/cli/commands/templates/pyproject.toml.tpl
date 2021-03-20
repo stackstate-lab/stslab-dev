@@ -5,25 +5,46 @@ description = "$project_name Custom Checks"
 authors = ["Your Name <your@email.address>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, !=3.6.* <=4.0.0"
+pyyaml = "^3.13"
+schematics = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-flakehell = "^0.9.0"
+pytest = "*"
 tox = "^3.22.0"
-black = "^20.8b1"
-mypy = "^0.812"
-py-backwards = "^0.7"
-tox-py-backwards = "^0.1"
-isort = "^5.7.0"
-stackstate-checks-base = { path = "$checksbase_path", develop = false }
 # StackState Agent Integration dev deps
-pyyaml = "^3.13"
 prometheus-client = "^0.3.0"
 six = "^1.12.0"
-schematics = "^2.1.0"
 Deprecated = "^1.2.11"
 requests = "^2.24.0"
+pytest-sugar = "^0.9.4"
+colorama = "^0.4.4"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+requires =
+    tox-py-backwards
+isolated_build = true
+envlist = py27
+[testenv]
+whitelist_externals = poetry
+poetry_add_dev_dependencies = True
+deps =
+    -e git+https://github.com/StackVista/stackstate-agent-integrations.git@$version#egg=stackstate_checks_base&subdirectory=stackstate_checks_base
+    pytest
+    pytest-sugar
+    prometheus-client
+    six
+    Deprecated
+    requests
+    enum34
+py_backwards = true
+commands =
+    pip uninstall -y $package_name
+    poetry install
+    poetry run pytest -W ignore::DeprecationWarning
+"""
 
 [tool.black]
 line-length = 120
@@ -42,21 +63,8 @@ exclude = '''
 )/
 '''
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = true
-envlist = python2
-[testenv]
-whitelist_externals = poetry
-py_backwards = true
-commands =
-    poetry install -vvv
-    poetry run pytest
-"""
-
 [tool.flakehell]
-exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv", ".ststemp", ".agent"]
+exclude = ["README.rst", "README.md", ".eggs", ".tox", "build",".venv", ".agent"]
 include = ["src", "tests"]
 format = "colored"
 max_line_length = 120
