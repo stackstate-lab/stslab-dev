@@ -82,7 +82,7 @@ class Agent:
         """
         dockerfile = f"""FROM stackstate/stackstate-agent-2:latest
         RUN apt update && \\
-            apt-get install -yq iputils-ping libkrb5-3 openssl gcc g++ && \\
+            apt-get install -yq iputils-ping libkrb5-3 gcc g++ && \\
             /opt/stackstate-agent/embedded/bin/pip uninstall -y requests && \\
             /opt/stackstate-agent/embedded/bin/pip install requests && \\
             /opt/stackstate-agent/embedded/bin/pip install pydevd-pycharm~=203.7148.57
@@ -93,11 +93,10 @@ class Agent:
         docker_ext_file = os.getenv("STSDEV_IMAGE_EXT")
         if docker_ext_file:
             with open(docker_ext_file, "r") as f:
-                docker_extension = [dockerfile]
-                docker_extension.extend(f.readlines())
-                dockerfile = "\n".join(docker_extension)
+                dockerfile += f.read()
 
+        self.echo("Building StackState Agent for Development:")
+        self.echo(dockerfile)
         docker_build = self.docker["build", "-t", self.image, "-"]
         complete_docker_build = docker_build << dockerfile
-        self.echo("Building StackState Agent for Development")
         self.echo(complete_docker_build())
