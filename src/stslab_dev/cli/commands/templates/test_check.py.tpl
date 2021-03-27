@@ -1,6 +1,7 @@
 from $check_pkg import $class_name
 from stackstate_checks.stubs import topology
 import yaml
+from typing import List
 
 
 def assert_component(components: List[dict], cid: str) -> dict:
