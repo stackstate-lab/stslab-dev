@@ -12,7 +12,10 @@ from . import templates
 class Checks(object):
     def __init__(self, check_name: str, echo=typer.echo):
         load_dotenv(dotenv_path=".env")
-        self.integration_pkg = os.environ["STSDEV_PKG"]
+        dirs_in_src = [
+            d for d in os.listdir("src") if not str(d).startswith(".")
+        ]
+        self.integration_pkg = os.path.join("src", str(dirs_in_src[0]))
         self.check_name = check_name
         self.check_name_capitalize = check_name[0].upper() + check_name[1:]
         self.check_name_lower = check_name.lower()
