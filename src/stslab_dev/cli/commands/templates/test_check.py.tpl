@@ -30,7 +30,7 @@ def test_$check_name_lower():
     topology.reset()
     instances = yaml.safe_load(instance_yaml)["instances"]
 
-    check = $class_name("$check_name_lower", {}, {}, instances=instance)
+    check = $class_name("$check_name_lower", {}, {}, instances=instances)
     check.check(instances[0])
     snapshot = topology.get_snapshot("")
     components = snapshot["components"]
@@ -44,7 +44,7 @@ def test_$check_name_lower():
     assert_relation(relations, app_id, host_id)
 
 instance_yaml = """
-instances
+instances:
    - instance_type: "$check_name_lower"
      url: "http://address:8080/of/some/rest/api"
      password: admin
