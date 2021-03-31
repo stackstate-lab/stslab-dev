@@ -1,6 +1,7 @@
-from stslab_dev.cli.commands.project import Project
-from unittest.mock import MagicMock
 from os import path
+from unittest.mock import MagicMock
+
+from stslab_dev.cli.commands.project import Project
 
 project_name = "test_project"
 checks_pkg = "my_checks"
@@ -28,4 +29,3 @@ def test_project_scaffold(tmpdir):
         assert path.exists(f"{project_name}/tests/resources/conf.d")
         assert path.exists(f"{project_name}/README.md")
         assert path.exists(f"{project_name}/pyproject.toml")
-        assert path.exists(f"{project_name}/.ststemp/packages/stackstate_checks_base")

@@ -1,0 +1,9 @@
+init_config:
+
+instances:
+  - url: "http://address:8080/of/some/rest/api"
+    instance_type: acmecheck
+    source_identifier: "urn:acmecheck:"
+    password: admin
+    username: admin
+    min_collection_interval: 30

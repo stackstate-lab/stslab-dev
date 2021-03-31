@@ -1,6 +1,6 @@
 import typer
-from .commands.checks import Checks
 
+from .commands.checks import Checks
 
 app = typer.Typer(help="Help manage checks in a project")
 

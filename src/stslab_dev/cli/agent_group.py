@@ -1,7 +1,7 @@
 import typer
-from .commands.agent import Agent
 from plumbum.commands.processes import ProcessExecutionError
 
+from .commands.agent import Agent
 
 app = typer.Typer(help="Help manage StackState Agent")
 
