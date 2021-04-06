@@ -39,6 +39,8 @@ class Agent:
             f"STS_STS_URL={os.getenv(self.STS_URL)}",
             "-e",
             "DOCKER_STS_AGENT=false",
+            "-e",
+            "CURL_CA_BUNDLE=",
             self.image,
         ] & FG
 
@@ -50,6 +52,8 @@ class Agent:
             "--rm",
             "-v",
             "%s:/etc/stackstate-agent" % agent_dir,
+            "-e",
+            "CURL_CA_BUNDLE=",
             self.image,
             "/opt/stackstate-agent/bin/run-dev-check.sh",
             check_name,
