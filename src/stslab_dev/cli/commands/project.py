@@ -55,6 +55,7 @@ class Project(object):
         env_entries = [
             "STS_URL=http://localhost:7070",
             "STS_API_KEY=xxxx",
+            "CURL_CA_BUNDLE=",
             "# Define additional docker run commands to include in agent image",
             "#STSDEV_IMAGE_EXT=path/to/file/with/docker/run/commands",
         ]
