@@ -53,9 +53,12 @@ class Project(object):
         self._write_file(path.join(self.integration_src_dir, "__init__.py"), "")
 
         env_entries = [
-            "STS_URL=http://localhost:7070",
+            "STS_URL=http://localhost:7077/stsAgent",
+            "# If you are using Docker on macOS: STS_URL=http://host.docker.internal:7077/stsAgent",
+            "# https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds",
             "STS_API_KEY=xxxx",
-            "CURL_CA_BUNDLE=",
+            "# Certificates bundle",
+            "#CURL_CA_BUNDLE=",
             "# Define additional docker run commands to include in agent image",
             "#STSDEV_IMAGE_EXT=path/to/file/with/docker/run/commands",
         ]

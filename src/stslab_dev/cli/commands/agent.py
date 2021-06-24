@@ -40,7 +40,7 @@ class Agent:
             "-e",
             "DOCKER_STS_AGENT=false",
             "-e",
-            f"CURL_CA_BUNDLE={os.getenv('CURL_CA_BUNDLE')}",
+            f"CURL_CA_BUNDLE={os.getenv('CURL_CA_BUNDLE', '')}",
             self.image,
         ] & FG
 
@@ -53,7 +53,7 @@ class Agent:
             "-v",
             "%s:/etc/stackstate-agent" % agent_dir,
             "-e",
-            f"CURL_CA_BUNDLE={os.getenv('CURL_CA_BUNDLE')}",
+            f"CURL_CA_BUNDLE={os.getenv('CURL_CA_BUNDLE', '')}",
             self.image,
             "/opt/stackstate-agent/bin/run-dev-check.sh",
             check_name,
