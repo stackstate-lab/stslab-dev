@@ -55,15 +55,15 @@ class BuildWorkspace:
         if not os.path.exists(self.dist_dir):
             os.makedirs(self.dist_dir)
         install_file = """#!/bin/bash
-            if test -f "./requirements.txt"; then
-                echo "Installing requirement"
-                sudo -u stackstate-agent /opt/stackstate-agent/embedded/bin/pip install -r ./requirements.txt
-            fi
-            echo "Copying config and checks to /etc/stackstate-agent"
-            sudo -u stackstate-agent cp -r ./conf.d/* /etc/stackstate-agent/conf.d
-            sudo -u stackstate-agent cp -r ./checks.d/* /etc/stackstate-agent/checks.d
-            echo "Done".
-        """
+if test -f "./requirements.txt"; then
+    echo "Installing requirement"
+    sudo -u stackstate-agent /opt/stackstate-agent/embedded/bin/pip --no-cache-dir install -r ./requirements.txt
+fi
+echo "Copying config and checks to /etc/stackstate-agent"
+sudo -u stackstate-agent cp -r ./conf.d/* /etc/stackstate-agent/conf.d
+sudo -u stackstate-agent cp -r ./checks.d/* /etc/stackstate-agent/checks.d
+echo "Done".
+"""
         self.echo(f"Packaging version {project_version} of {self.pkg_name}")
         with (open(j(self.agent_dir, "install.sh"), mode="w")) as f:
             f.write(install_file)
