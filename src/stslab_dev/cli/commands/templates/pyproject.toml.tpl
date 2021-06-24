@@ -69,6 +69,8 @@ include = ["src", "tests"]
 format = "colored"
 max_line_length = 120
 show_source = true
+# Temp fix until issue is fixed https://github.com/flakehell/flakehell/issues/10
+extended_default_ignore=[]
 
 [tool.flakehell.plugins]
 "*" = [
