@@ -92,7 +92,7 @@ def package(
 @app.command("update")
 def update(
     version: str = typer.Option(
-        "1.10.1", help="`stackstate_checks` version. This is a git tag."
+        "1.14.0", help="`stackstate_checks` version. This is a git tag."
     ),
     skip_poetry_install: bool = typer.Option("False", help="Skip poetry install"),
 ):
