@@ -71,7 +71,7 @@ class Agent:
     def delete_image(self) -> None:
         self.docker["rmi", "--force", self.image] & FG
 
-    def build_image(self) -> None:
+    def build_image(self, image="stackstate/stackstate-agent-2:latest", ) -> None:
         if self.image_exists():
             return
 
@@ -84,7 +84,7 @@ class Agent:
         run_check = f"""{init_file}\\n\\
             agent check "$1"\\n\\
         """
-        dockerfile = f"""FROM stackstate/stackstate-agent-2:latest
+        dockerfile = f"""FROM '{image}'
         RUN apt update && \\
             apt-get install -yq iputils-ping libkrb5-3 gcc g++ && \\
             /opt/stackstate-agent/embedded/bin/pip uninstall -y requests && \\
