@@ -25,7 +25,7 @@ colorama = "^0.4.4"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = { version = "*", allow-prereleases = true }
-typer-cli = "^0.0.11"
+typer-cli = "^0.0.12"
 tox = "^3.22.0"
 
 [tool.pytest.ini_options]

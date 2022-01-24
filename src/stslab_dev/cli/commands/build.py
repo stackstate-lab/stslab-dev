@@ -6,6 +6,7 @@ from os.path import join as j
 
 import toml
 import typer
+from dotenv import load_dotenv
 from plumbum import local
 from py_backwards import const, exceptions, messages
 from py_backwards.compiler import compile_files
@@ -13,6 +14,7 @@ from py_backwards.compiler import compile_files
 
 class BuildWorkspace:
     def __init__(self, base_dir: str, echo=typer.echo) -> None:
+        load_dotenv(dotenv_path=".env")
         self.echo = echo
         self.agent_dir = j(base_dir, ".agent")
         self.checks_d_dir = j(self.agent_dir, "checks.d")
@@ -71,6 +73,9 @@ echo "Done".
         shutil.make_archive(j(self.dist_dir, zipfile), "zip", self.agent_dir)
 
     def _compile_to_py27(self) -> None:
+        compile_to_27 = os.getenv("compile_to_27", "true")
+        if compile_to_27 != "true":
+            return
         try:
             self.echo(f"Compiling files in {self.pkg_dir}  to {self.checks_d_dir}")
             result = compile_files(
@@ -97,13 +102,18 @@ echo "Done".
             return
         lines = []
         matcher = re.compile("^[A-Za-z0-9]*==")
+        typing_found = False
         for line in requirements.splitlines():
             match = matcher.match(line)
             if match:
-                lines.append(line.split(";")[0])
+                lib_name_and_version = line.split(";")[0]
+                lines.append(lib_name_and_version)
+                if lib_name_and_version.startswith("typing"):
+                    typing_found = True
         requirements_file = f"{self.agent_dir}/requirements.txt"
-        lines.append(
-            "typing==3.7.4"
-        )  # This is to support the dangling imports in 2.7 for now.
+        if not typing_found:
+            lines.append(
+                "typing==3.7.4"
+            )  # This is to support the dangling imports in 2.7 for now.
         with (open(requirements_file, mode="w")) as f:
             f.write("\n".join(lines))

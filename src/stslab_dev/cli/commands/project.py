@@ -61,6 +61,8 @@ class Project(object):
             "#CURL_CA_BUNDLE=",
             "# Define additional docker run commands to include in agent image",
             "#STSDEV_IMAGE_EXT=path/to/file/with/docker/run/commands",
+            "# Allows to develop in python 3 but compile down to python 2.7",
+            "compile_to_27=true",
         ]
         self._write_file(path.join(self.proj_name, ".env"), "\n".join(env_entries))
 
