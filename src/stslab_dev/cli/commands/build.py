@@ -96,18 +96,25 @@ echo "Done".
             raise e
 
     def _setup_requirements_txt(self) -> None:
+        exclude_libs = os.getenv("EXCLUDE_LIBS", "")
+        if exclude_libs != "":
+            exclude_libs_list = [lib.strip() for lib in exclude_libs.split(",")]
+        else:
+            exclude_libs_list = []
         poetry = local["poetry"]
         requirements = poetry["export", "--without-hashes"]()
         if requirements.strip() == "":
             return
         lines = []
-        matcher = re.compile("^[A-Za-z0-9]*==")
+        matcher = re.compile("^[\\-A-Za-z0-9]*==")
         typing_found = False
         for line in requirements.splitlines():
             match = matcher.match(line)
             if match:
                 lib_name_and_version = line.split(";")[0]
-                lines.append(lib_name_and_version)
+                lib_name = lib_name_and_version.split("==")[0].strip()
+                if lib_name not in exclude_libs_list:
+                    lines.append(lib_name_and_version)
                 if lib_name_and_version.startswith("typing"):
                     typing_found = True
         requirements_file = f"{self.agent_dir}/requirements.txt"

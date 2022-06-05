@@ -31,6 +31,7 @@ class Agent:
         self.docker[
             "run",
             "--rm",
+            "-it",
             "-v",
             "%s:/etc/stackstate-agent" % agent_dir,
             "-e",
@@ -42,11 +43,11 @@ class Agent:
             "-e",
             f"CURL_CA_BUNDLE={os.getenv('CURL_CA_BUNDLE', '')}",
             self.image,
+            "/opt/stackstate-agent/bin/run-agent.sh"
         ] & FG
 
     def run_agent_check(self, check_name: str) -> None:
         agent_dir = self.prepare_to_run()
-        self.build_image()
         self.docker[
             "run",
             "--rm",
@@ -74,15 +75,31 @@ class Agent:
     def build_image(self, image="stackstate/stackstate-agent-2:latest", ) -> None:
         if self.image_exists():
             return
-
+        commands = os.getenv("STSDEV_ADDITIONAL_COMMANDS", None)
         init_file = """#!/bin/bash\\n\\
             if test -f "/etc/stackstate-agent/requirements.txt"; then\\n\\
                 echo "Installing requirement"\\n\\
                 /opt/stackstate-agent/embedded/bin/pip install -r /etc/stackstate-agent/requirements.txt\\n\\
             fi\\n\\
         """
-        run_check = f"""{init_file}\\n\\
+        run_check = f"{init_file}\\n\\"
+        run_agent = "#!/bin/bash\\n\\"
+        if commands is not None:
+            run_check = f"""{run_check}\\n\\
+                echo "Running command {commands}"\\n\\ 
+                nohup {commands} &\\n\\
+            """
+            run_agent = f"""{run_check}\\n\\
+                echo "Running command {commands}"\\n\\ 
+                nohup {commands} &\\n\\
+            """
+
+        run_check = f"""{run_check}\\n\\
             agent check "$1"\\n\\
+        """
+
+        run_agent = f"""{run_agent}\\n\\
+            agent run\\n\\
         """
         dockerfile = f"""FROM '{image}'
         RUN apt update && \\
@@ -92,6 +109,8 @@ class Agent:
             /opt/stackstate-agent/embedded/bin/pip install pydevd-pycharm~=203.7148.57
         RUN echo '{init_file}' >> /etc/cont-init.d/95-load-requirement.sh
         RUN echo '{run_check}' >> /opt/stackstate-agent/bin/run-dev-check.sh
+        RUN echo '{run_agent}' >> /opt/stackstate-agent/bin/run-agent.sh
+        RUN chmod +x /opt/stackstate-agent/bin/run-agent.sh 
         RUN chmod +x /opt/stackstate-agent/bin/run-dev-check.sh /etc/cont-init.d/95-load-requirement.sh
         """
         docker_ext_file = os.getenv("STSDEV_IMAGE_EXT")

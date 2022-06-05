@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stslab-dev"
-version = "0.0.3"
+version = "0.0.4"
 description = "StsDev tool for the development of StackState Agent Integrations"
 authors = ["Ravan Naidoo <rnaidoo@stackstate.com>"]
 
@@ -20,7 +20,7 @@ mypy = "^0.812"
 py-backwards = "^0.7"
 isort = "^5.7.0"
 black = "^20.8b1"
-colorama = "^0.4.4"
+colorama = "^0.4.2"
 
 
 [tool.poetry.dev-dependencies]
