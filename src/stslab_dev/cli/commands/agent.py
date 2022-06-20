@@ -80,19 +80,23 @@ class Agent:
             if test -f "/etc/stackstate-agent/requirements.txt"; then\\n\\
                 echo "Installing requirement"\\n\\
                 /opt/stackstate-agent/embedded/bin/pip install -r /etc/stackstate-agent/requirements.txt\\n\\
+                echo "Done installing dependencies"\\n\\
             fi\\n\\
         """
         if commands is not None:
             init_file = f"""{init_file}
                 echo "Running command {commands}"\\n\\ 
                 nohup {commands} &\\n\\
+                echo "Done running command in background"\\n\\
             """
 
         run_check = f"""{init_file}
+            echo "agent check $1"\\n\\
             agent check "$1"\\n\\
         """
 
         run_agent = f"""{init_file}
+            echo "agent run"\\n\\
             agent run\\n\\
         """
         dockerfile = f"""FROM '{image}'
@@ -103,8 +107,7 @@ class Agent:
             /opt/stackstate-agent/embedded/bin/pip install pydevd-pycharm~=203.7148.57
         RUN echo '{run_check}' >> /opt/stackstate-agent/bin/run-dev-check.sh
         RUN echo '{run_agent}' >> /opt/stackstate-agent/bin/run-agent.sh
-        RUN chmod +x /opt/stackstate-agent/bin/run-agent.sh 
-        RUN chmod +x /opt/stackstate-agent/bin/run-dev-check.sh
+        RUN chmod +x /opt/stackstate-agent/bin/run-agent.sh /opt/stackstate-agent/bin/run-dev-check.sh
         """
         docker_ext_file = os.getenv("STSDEV_IMAGE_EXT")
         if docker_ext_file:
