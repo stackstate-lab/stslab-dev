@@ -82,23 +82,17 @@ class Agent:
                 /opt/stackstate-agent/embedded/bin/pip install -r /etc/stackstate-agent/requirements.txt\\n\\
             fi\\n\\
         """
-        run_check = f"{init_file}"
-        run_agent = "#!/bin/bash\\n\\"
         if commands is not None:
-            run_check = f"""{run_check}\\n\\
-                echo "Running command {commands}"\\n\\ 
-                nohup {commands} &\\n\\
-            """
-            run_agent = f"""{run_check}\\n\\
+            init_file = f"""{init_file}
                 echo "Running command {commands}"\\n\\ 
                 nohup {commands} &\\n\\
             """
 
-        run_check = f"""{run_check}
+        run_check = f"""{init_file}
             agent check "$1"\\n\\
         """
 
-        run_agent = f"""{run_agent}
+        run_agent = f"""{init_file}
             agent run\\n\\
         """
         dockerfile = f"""FROM '{image}'
@@ -107,11 +101,10 @@ class Agent:
             /opt/stackstate-agent/embedded/bin/pip uninstall -y requests && \\
             /opt/stackstate-agent/embedded/bin/pip install requests && \\
             /opt/stackstate-agent/embedded/bin/pip install pydevd-pycharm~=203.7148.57
-        RUN echo '{init_file}' >> /etc/cont-init.d/95-load-requirement.sh
         RUN echo '{run_check}' >> /opt/stackstate-agent/bin/run-dev-check.sh
         RUN echo '{run_agent}' >> /opt/stackstate-agent/bin/run-agent.sh
         RUN chmod +x /opt/stackstate-agent/bin/run-agent.sh 
-        RUN chmod +x /opt/stackstate-agent/bin/run-dev-check.sh /etc/cont-init.d/95-load-requirement.sh
+        RUN chmod +x /opt/stackstate-agent/bin/run-dev-check.sh
         """
         docker_ext_file = os.getenv("STSDEV_IMAGE_EXT")
         if docker_ext_file:
