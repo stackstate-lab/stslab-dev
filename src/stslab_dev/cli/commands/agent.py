@@ -82,7 +82,7 @@ class Agent:
                 /opt/stackstate-agent/embedded/bin/pip install -r /etc/stackstate-agent/requirements.txt\\n\\
             fi\\n\\
         """
-        run_check = f"{init_file}\\n\\"
+        run_check = f"{init_file}"
         run_agent = "#!/bin/bash\\n\\"
         if commands is not None:
             run_check = f"""{run_check}\\n\\
@@ -94,11 +94,11 @@ class Agent:
                 nohup {commands} &\\n\\
             """
 
-        run_check = f"""{run_check}\\n\\
+        run_check = f"""{run_check}
             agent check "$1"\\n\\
         """
 
-        run_agent = f"""{run_agent}\\n\\
+        run_agent = f"""{run_agent}
             agent run\\n\\
         """
         dockerfile = f"""FROM '{image}'
