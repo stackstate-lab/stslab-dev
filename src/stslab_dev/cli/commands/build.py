@@ -47,6 +47,12 @@ class BuildWorkspace:
             if os.path.exists(self.stackstate_yaml):
                 shutil.copy(self.stackstate_yaml, j(self.agent_dir, "stackstate.yaml"))
 
+        # Copy resources in python package
+        ignore_py_files = shutil.ignore_patterns("*.py")
+        shutil.copytree(
+            self.pkg_dir, self.checks_d_dir, ignore=ignore_py_files
+        )
+
         self._compile_to_py27()
         self._setup_requirements_txt()
 

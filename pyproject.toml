@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stslab-dev"
-version = "0.0.5"
+version = "0.0.6"
 description = "StsDev tool for the development of StackState Agent Integrations"
 authors = ["Ravan Naidoo <rnaidoo@stackstate.com>"]
 
