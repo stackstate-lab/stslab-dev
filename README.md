@@ -39,7 +39,7 @@ Prerequisites:
 Using `pip` to install `stsdev`.
 
 ```bash
-python -m pip install https://github.com/stackstate-lab/stslab-dev/releases/download/v0.0.6/stslab_dev-0.0.6-py3-none-any.whl
+python -m pip install https://github.com/stackstate-lab/stslab-dev/releases/download/v0.0.7/stslab_dev-0.0.7-py3-none-any.whl
 
 ```
 
