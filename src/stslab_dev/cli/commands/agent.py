@@ -76,6 +76,12 @@ class Agent:
         if self.image_exists():
             return
         commands = os.getenv("STSDEV_ADDITIONAL_COMMANDS", None)
+        foreground = os.getenv("STSDEV_ADDITIONAL_COMMANDS_FG", "false")
+        if foreground == "false":
+            command_line = f"nohup {commands} &"
+        else:
+            command_line = commands
+
         init_file = """#!/bin/bash\\n\\
             if test -f "/etc/stackstate-agent/requirements.txt"; then\\n\\
                 echo "Installing requirement"\\n\\
@@ -86,7 +92,7 @@ class Agent:
         if commands is not None:
             init_file = f"""{init_file}
                 echo "Running command {commands}"\\n\\ 
-                nohup {commands} &\\n\\
+                {command_line}\\n\\
                 echo "Done running command in background"\\n\\
             """
 
