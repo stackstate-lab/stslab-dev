@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stslab-dev"
-version = "0.0.6"
+version = "0.0.7"
 description = "StsDev tool for the development of StackState Agent Integrations"
 authors = ["Ravan Naidoo <rnaidoo@stackstate.com>"]
 
@@ -8,7 +8,7 @@ authors = ["Ravan Naidoo <rnaidoo@stackstate.com>"]
 stsdev = "stslab_dev.cli.main:main"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7.2,<4.0"
 typer = "^0.3.2"
 plumbum = "^1.7.0"
 python-dotenv = "^0.15.0"
@@ -16,11 +16,12 @@ requests = "^2.25.1"
 stringcase = "^1.2.0"
 flakehell = "^0.9.0"
 flake8 = "^3.9.2"
-mypy = "^0.812"
+mypy = "^0.961"
 py-backwards = "^0.7"
-isort = "^5.7.0"
-black = "^20.8b1"
+isort = "^5.10.1"
+black = "^21.12b0"
 colorama = "^0.4.2"
+pylint = "^2.14.3"
 
 
 [tool.poetry.dev-dependencies]

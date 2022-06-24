@@ -5,8 +5,8 @@ description = "$project_name Custom Checks"
 authors = ["Your Name <your@email.address>"]
 
 [tool.poetry.dependencies]
-python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, !=3.6.* <=4.0.0"
-pyyaml = "^3.13"
+python = ">=2.7,<3.0.0 || >=3.7.0,<4"
+pyyaml = "^5.4.1"
 schematics = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
