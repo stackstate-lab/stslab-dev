@@ -1,8 +1,35 @@
-# StsDev - Development for StackState Agent Integrations
+
+# Deprecated Project
+
+This project is now deprecated. The functionality has been reimplemented using
+[Yeoman](https://yeoman.io/) and [PDM](https://pdm.fming.dev/).
+
+The [stackstate-lab](https://github.com/stackstate-lab/generator-stackstate-lab) Yeoman generator can be used to 
+scaffold new StackState Agent Check projects using a basic check structure or a more complex structure that uses
+the [StackState ETL Framework](https://github.com/stackstate-etl/).
+
+The generated project uses [PDM](https://pdm.fming.dev/) for Python package and dependency management which 
+supports the latest PEP standards. Especially [PEP 582 support](https://www.python.org/dev/peps/pep-0582), no virtualenv involved at all.
+[PDM Scripts](https://pdm.fming.dev/latest/usage/scripts/) was another compeling feature that aided the migration
+of `stsdev` functionality.
+
+| Command        | Description                                                                                                                |
+|----------------|----------------------------------------------------------------------------------------------------------------------------|
+| pdm install    | Installs package and setups up PEP 582 environment                                                                         |
+| pdm test       | Runs unit tests                                                                                                            |
+| pdm format     | Code styling and linting performed by Black, FlakeHell and MyPy                                                            |
+| pdm build      | Will transpile the custom agent check to Python 2.7 and create install zip                                                 |
+| pdm cleanAgent | Remove the custom StackState Agent Docker image used during development                                                    |
+| pdm buildAgent | Build a custom [StackState Agent Docker](https://hub.docker.com/r/stackstate/stackstate-agent-2) to use during development |
+| pdm check      | Dry-run custom agent check inside the StackState Agent container                                                           |
+| pdm serve      | Starts the StackState Agent in the foreground using the configuration `src/data/conf.d/` directory                         |
+
+
+---
+# ~~StsDev - Development for StackState Agent Integrations~~
 
 StsDev helps you declare, build, test and package StackStage Agent Integration projects,
 ensuring you have a consistent development experience.
-
 ## Development
 
 Prerequisites:
